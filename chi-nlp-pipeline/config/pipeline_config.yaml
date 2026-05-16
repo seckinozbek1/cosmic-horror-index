@@ -1,0 +1,486 @@
+# Cosmic Horror Index — NLP Pipeline Configuration
+
+# === MODEL SETTINGS ===
+embedding_model: "all-MiniLM-L6-v2"          # SentenceTransformer model for semantic search
+embedding_dim: 384
+classification_model: "claude-sonnet-4-20250514"  # For passage classification
+max_tokens_per_classification: 500
+faiss_index_type: "IndexFlatIP"               # Inner product (cosine sim on normalized vectors)
+top_k_retrieval: 20                           # Passages retrieved per axis per tradition
+min_relevance_threshold: 0.3                  # Below this, passage is discarded
+
+# === CHUNK SETTINGS ===
+chunk_strategy:
+  verse_texts: "verse"          # Upanishads, Pali Canon, Dao De Jing, Eddas, Theogony
+  prose_texts: "paragraph"      # Lovecraft, commentaries, scholarship
+  max_chunk_tokens: 256         # Roughly 1-3 verses or 1 paragraph
+  overlap_tokens: 32            # Sliding window overlap for prose
+
+# === CORPUS SOURCES ===
+# Each entry: id, tradition, source_url, format, translation_note
+corpora:
+  # --- SOUTH ASIAN ---
+  - id: "upanishads_olivelle"
+    tradition: "advaita_vedanta"
+    texts:
+      - name: "Brihadaranyaka Upanishad"
+        source: "https://www.sacred-texts.com/hin/sbe15/index.htm"
+        alt_source: "GRETIL: http://gretil.sub.uni-goettingen.de/gretil.html"
+        format: "html_scrape"
+        translation: "Max Muller (SBE) / Patrick Olivelle (Oxford) — prefer Olivelle if available locally"
+        chunk_by: "verse"
+        key_sections: ["1.4", "2.4", "3.8", "4.3-4.5"]
+      - name: "Chandogya Upanishad"
+        source: "https://www.sacred-texts.com/hin/sbe01/index.htm"
+        format: "html_scrape"
+        translation: "Max Muller (SBE)"
+        chunk_by: "verse"
+        key_sections: ["6.1-6.16", "7.1", "8.1"]
+      - name: "Mandukya Upanishad"
+        source: "https://www.sacred-texts.com/hin/sbe01/index.htm"
+        format: "html_scrape"
+        translation: "Max Muller (SBE)"
+        chunk_by: "verse"
+      - name: "Isha Upanishad"
+        source: "https://www.sacred-texts.com/hin/isa/index.htm"
+        format: "html_scrape"
+        chunk_by: "verse"
+      - name: "Katha Upanishad"
+        source: "https://www.sacred-texts.com/hin/sbe15/index.htm"
+        format: "html_scrape"
+        chunk_by: "verse"
+
+  - id: "bhagavad_gita"
+    tradition: "bhakti_hinduism"
+    texts:
+      - name: "Bhagavad Gita"
+        source: "https://www.sacred-texts.com/hin/gita/index.htm"
+        format: "html_scrape"
+        translation: "Edwin Arnold (public domain) / Eknath Easwaran"
+        chunk_by: "verse"
+        key_sections: ["ch2", "ch4", "ch9", "ch11", "ch18"]
+
+  - id: "brahma_sutra_bhashya"
+    tradition: "advaita_vedanta"
+    texts:
+      - name: "Shankara's Brahma Sutra Bhashya"
+        source: "https://www.sacred-texts.com/hin/sbe34/index.htm"
+        format: "html_scrape"
+        translation: "George Thibaut (SBE 34, 38)"
+        chunk_by: "paragraph"
+
+  - id: "pali_canon"
+    tradition: "buddhism"
+    texts:
+      - name: "Dhammapada"
+        source: "https://suttacentral.net/dhp"
+        alt_source: "https://www.accesstoinsight.org/tipitaka/kn/dhp/index.html"
+        format: "html_scrape"
+        translation: "Thanissaro Bhikkhu (ATI)"
+        chunk_by: "verse"
+      - name: "Heart Sutra (Prajnaparamita Hrdaya)"
+        source: "https://www.accesstoinsight.org/"
+        format: "html_scrape"
+        translation: "Red Pine / Edward Conze"
+        chunk_by: "verse"
+      - name: "Sutta Nipata"
+        source: "https://suttacentral.net/snp"
+        format: "html_scrape"
+        translation: "Thanissaro Bhikkhu"
+        chunk_by: "verse"
+      - name: "Majjhima Nikaya (selected suttas)"
+        source: "https://suttacentral.net/mn"
+        format: "html_scrape"
+        translation: "Thanissaro Bhikkhu / Bhikkhu Bodhi"
+        chunk_by: "paragraph"
+        key_sections: ["MN1", "MN22", "MN72", "MN140"]
+
+  - id: "nagarjuna_mmk"
+    tradition: "buddhism"
+    texts:
+      - name: "Mulamadhyamakakarika"
+        source: "manual_entry"
+        translation: "Jay Garfield (Oxford, 1995)"
+        chunk_by: "verse"
+
+  - id: "jain_tattvartha"
+    tradition: "jainism"
+    texts:
+      - name: "Tattvartha Sutra"
+        source: "manual_entry"
+        translation: "Nathmal Tatia (HarperCollins)"
+        chunk_by: "verse"
+
+  # --- EAST ASIAN ---
+  - id: "dao_de_jing"
+    tradition: "daoism"
+    texts:
+      - name: "Dao De Jing"
+        source: "https://www.sacred-texts.com/tao/taote.htm"
+        format: "html_scrape"
+        translation: "James Legge (public domain)"
+        chunk_by: "verse"  # 81 chapters = 81 chunks
+
+  - id: "zhuangzi"
+    tradition: "daoism"
+    texts:
+      - name: "Zhuangzi (Inner Chapters)"
+        source: "https://www.sacred-texts.com/tao/mcm/index.htm"
+        format: "html_scrape"
+        translation: "James Legge"
+        chunk_by: "paragraph"
+        key_sections: ["ch1", "ch2", "ch6", "ch7"]
+
+  # --- NORTHERN EUROPEAN ---
+  - id: "poetic_edda"
+    tradition: "norse"
+    texts:
+      - name: "Voluspa (Prophecy of the Seeress)"
+        source: "https://www.sacred-texts.com/neu/poe/poe03.htm"
+        format: "html_scrape"
+        translation: "Henry Adams Bellows (1923, public domain)"
+        chunk_by: "verse"
+      - name: "Havamal (Sayings of the High One)"
+        source: "https://www.sacred-texts.com/neu/poe/poe04.htm"
+        format: "html_scrape"
+        translation: "Bellows"
+        chunk_by: "verse"
+      - name: "Grimnismal"
+        source: "https://www.sacred-texts.com/neu/poe/poe06.htm"
+        format: "html_scrape"
+        translation: "Bellows"
+        chunk_by: "verse"
+
+  - id: "prose_edda"
+    tradition: "norse"
+    texts:
+      - name: "Prose Edda (Gylfaginning)"
+        source: "https://www.sacred-texts.com/neu/pre/index.htm"
+        format: "html_scrape"
+        translation: "Arthur Gilchrist Brodeur (1916, public domain)"
+        chunk_by: "paragraph"
+
+  # --- ANCIENT MEDITERRANEAN ---
+  - id: "hesiod"
+    tradition: "greek"
+    texts:
+      - name: "Theogony"
+        source: "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0130"
+        format: "html_scrape"
+        translation: "Hugh G. Evelyn-White (Loeb, public domain)"
+        chunk_by: "verse"
+      - name: "Works and Days"
+        source: "https://www.perseus.tufts.edu/hopper/"
+        format: "html_scrape"
+        translation: "Evelyn-White"
+        chunk_by: "verse"
+
+  - id: "orphic_hymns"
+    tradition: "greek"
+    texts:
+      - name: "Orphic Hymns"
+        source: "https://www.sacred-texts.com/cla/orp/index.htm"
+        format: "html_scrape"
+        translation: "Thomas Taylor (1792, public domain)"
+        chunk_by: "verse"
+
+  - id: "egyptian_book_of_dead"
+    tradition: "egyptian"
+    texts:
+      - name: "Book of the Dead"
+        source: "https://www.sacred-texts.com/egy/ebod/index.htm"
+        format: "html_scrape"
+        translation: "E.A. Wallis Budge (public domain)"
+        chunk_by: "paragraph"
+        key_sections: ["ch17", "ch125", "ch175"]
+
+  - id: "pyramid_texts"
+    tradition: "egyptian"
+    texts:
+      - name: "Pyramid Texts (selections)"
+        source: "https://www.sacred-texts.com/egy/index.htm"
+        format: "html_scrape"
+        translation: "Samuel Mercer / James Allen"
+        chunk_by: "verse"
+
+  - id: "roman_cicero"
+    tradition: "roman"
+    texts:
+      - name: "De Natura Deorum"
+        source: "https://www.perseus.tufts.edu/hopper/"
+        format: "html_scrape"
+        translation: "H. Rackham (Loeb)"
+        chunk_by: "paragraph"
+
+  - id: "ovid_metamorphoses"
+    tradition: "roman"
+    texts:
+      - name: "Metamorphoses (Book 1 — Creation)"
+        source: "https://www.perseus.tufts.edu/hopper/"
+        format: "html_scrape"
+        translation: "A.S. Kline (public domain)"
+        chunk_by: "paragraph"
+        key_sections: ["book1"]
+
+  # --- MESOAMERICAN ---
+  - id: "florentine_codex"
+    tradition: "aztec"
+    texts:
+      - name: "Florentine Codex (selections on cosmology)"
+        source: "manual_entry"
+        translation: "Anderson & Dibble"
+        chunk_by: "paragraph"
+        note: "Limited digitization; supplement with León-Portilla summaries"
+
+  - id: "leon_portilla"
+    tradition: "aztec"
+    texts:
+      - name: "Aztec Thought and Culture"
+        source: "manual_entry"
+        translation: "Miguel León-Portilla (1963)"
+        chunk_by: "paragraph"
+        note: "Secondary source but authoritative on Five Suns cosmology"
+
+  # --- ESOTERIC ---
+  - id: "gnostic_nag_hammadi"
+    tradition: "gnosticism"
+    texts:
+      - name: "Apocryphon of John"
+        source: "http://www.gnosis.org/naghamm/apocjn-davies.html"
+        format: "html_scrape"
+        translation: "Stevan Davies"
+        chunk_by: "paragraph"
+      - name: "Gospel of Truth"
+        source: "http://www.gnosis.org/naghamm/got-barnstone.html"
+        format: "html_scrape"
+        translation: "Robert Grant"
+        chunk_by: "paragraph"
+      - name: "On the Origin of the World"
+        source: "http://www.gnosis.org/naghamm/origin-barnstone.html"
+        format: "html_scrape"
+        translation: "Barnstone & Meyer"
+        chunk_by: "paragraph"
+
+  # --- EAST ASIAN (SHINTO) ---
+  - id: "kojiki"
+    tradition: "shinto"
+    texts:
+      - name: "Kojiki (Records of Ancient Matters)"
+        source: "https://www.sacred-texts.com/shi/kj/index.htm"
+        format: "html_scrape"
+        translation: "Basil Hall Chamberlain (1882, public domain)"
+        chunk_by: "paragraph"
+        key_sections: ["vol1"]
+
+  # --- BASELINE (LOVECRAFT) ---
+  - id: "lovecraft_fiction"
+    tradition: "lovecraft"
+    texts:
+      - name: "The Call of Cthulhu"
+        source: "https://www.hplovecraft.com/writings/texts/fiction/cc.aspx"
+        alt_source: "Project Gutenberg"
+        format: "html_scrape"
+        chunk_by: "paragraph"
+      - name: "The Dunwich Horror"
+        source: "https://www.hplovecraft.com/writings/texts/fiction/dh.aspx"
+        format: "html_scrape"
+        chunk_by: "paragraph"
+      - name: "At the Mountains of Madness"
+        source: "https://www.hplovecraft.com/writings/texts/fiction/mm.aspx"
+        format: "html_scrape"
+        chunk_by: "paragraph"
+      - name: "The Colour Out of Space"
+        source: "https://www.hplovecraft.com/writings/texts/fiction/cs.aspx"
+        format: "html_scrape"
+        chunk_by: "paragraph"
+      - name: "The Whisperer in Darkness"
+        source: "https://www.hplovecraft.com/writings/texts/fiction/wid.aspx"
+        format: "html_scrape"
+        chunk_by: "paragraph"
+      - name: "The Shadow Over Innsmouth"
+        source: "https://www.hplovecraft.com/writings/texts/fiction/soi.aspx"
+        format: "html_scrape"
+        chunk_by: "paragraph"
+
+  # --- IRRELIGIOUS (philosophical texts) ---
+  - id: "camus_sisyphus"
+    tradition: "absurdism"
+    texts:
+      - name: "The Myth of Sisyphus (key passages)"
+        source: "manual_entry"
+        translation: "Justin O'Brien (Vintage)"
+        chunk_by: "paragraph"
+        note: "Under copyright — use short fair-use extracts only"
+
+  - id: "spinoza_ethics"
+    tradition: "pantheism"
+    texts:
+      - name: "Ethics (Part I — Concerning God)"
+        source: "https://www.sacred-texts.com/phi/spinoza/ethic/index.htm"
+        alt_source: "Project Gutenberg"
+        format: "html_scrape"
+        translation: "R.H.M. Elwes (public domain)"
+        chunk_by: "paragraph"
+
+
+# === AXIS DEFINITIONS & PROBE QUERIES ===
+# Each axis has: id, label, description, weight, and probe queries
+# Probe queries are natural language descriptions of what HIGH and LOW scores look like
+# Used for semantic retrieval from the corpus
+
+axes:
+  - id: "omniscience"
+    label: "Omniscience"
+    description: "Does the entity or ultimate reality know everything?"
+    weight: 1
+    probes_high:
+      - "the divine knows all things past present and future"
+      - "nothing is hidden from the supreme being"
+      - "the ultimate reality is all-knowing and all-seeing"
+      - "the cosmic consciousness perceives every thought and action"
+      - "infinite knowledge and awareness beyond human comprehension"
+    probes_low:
+      - "the gods have limited knowledge"
+      - "the divine can be deceived or surprised"
+      - "there is no all-knowing entity"
+      - "knowledge is distributed among many beings"
+
+  - id: "omnipotence"
+    label: "Omnipotence"
+    description: "Can the entity do anything?"
+    weight: 1
+    probes_high:
+      - "the supreme being has unlimited power over all creation"
+      - "nothing can resist the will of the divine"
+      - "the ultimate reality creates and destroys at will"
+      - "the cosmic force is irresistible and absolute"
+      - "all things are possible for the highest power"
+    probes_low:
+      - "the gods have limited power and can be challenged"
+      - "divine power is constrained by rules or other forces"
+      - "no single entity has absolute power"
+
+  - id: "self_sufficiency"
+    label: "Self-sufficiency"
+    description: "Does the entity need anything from creation?"
+    weight: 1
+    probes_high:
+      - "the divine needs nothing from creation or creatures"
+      - "the supreme being is complete and lacking nothing"
+      - "worship and praise are unnecessary to the absolute"
+      - "the ultimate reality is self-existent and self-sustaining"
+      - "the cosmos operates independently of human participation"
+    probes_low:
+      - "the gods require offerings and sacrifices"
+      - "divine power depends on human worship or action"
+      - "the cosmic order requires human participation to maintain"
+
+  - id: "indifference"
+    label: "Indifference to humans"
+    description: "Does the entity care about human welfare?"
+    weight: 2
+    probes_high:
+      - "the ultimate reality is indifferent to human suffering"
+      - "the cosmos operates without concern for human welfare"
+      - "divine power does not respond to prayer or supplication"
+      - "human existence is irrelevant to the cosmic order"
+      - "the supreme being neither loves nor hates creation"
+      - "the universe continues regardless of human action"
+    probes_low:
+      - "the divine loves and cares for humanity"
+      - "the supreme being responds to prayer and devotion"
+      - "the cosmic order is designed for human benefit"
+      - "the gods are moved by human suffering"
+
+  - id: "incomprehensibility"
+    label: "Incomprehensibility"
+    description: "Can humans understand the ultimate reality?"
+    weight: 2
+    probes_high:
+      - "the divine nature is beyond human understanding"
+      - "the ultimate reality cannot be described in words"
+      - "human minds cannot grasp the infinite"
+      - "attempting to know the absolute leads to madness or confusion"
+      - "the supreme being is ineffable and unknowable"
+      - "language and thought fail when approaching the divine"
+    probes_low:
+      - "the divine can be known through scripture or revelation"
+      - "human reason can understand the nature of reality"
+      - "the gods communicate clearly with humanity"
+
+  - id: "human_insignificance"
+    label: "Human insignificance"
+    description: "Do humans matter in this cosmological system?"
+    weight: 2
+    probes_high:
+      - "humanity is insignificant in the cosmic scale"
+      - "human civilization is a momentary phenomenon"
+      - "individual human life has no ultimate meaning or purpose"
+      - "the universe existed for vast ages before humans and will continue after"
+      - "human concerns are trivial compared to cosmic forces"
+    probes_low:
+      - "humanity has a special role in creation"
+      - "the cosmos was made for human benefit"
+      - "human actions have cosmic significance"
+      - "the divine values each human soul"
+
+  - id: "cyclical_destruction"
+    label: "Cyclical destruction"
+    description: "Does the cosmos destroy itself and rebuild?"
+    weight: 1
+    probes_high:
+      - "the universe is destroyed and recreated in endless cycles"
+      - "worlds end in flood fire or catastrophe and are remade"
+      - "the cosmic order dissolves back into chaos periodically"
+      - "creation and destruction alternate eternally"
+      - "the end of the world is a recurring event not a singular one"
+    probes_low:
+      - "creation happened once and is permanent"
+      - "the cosmos has a single linear history"
+      - "the world will end once and be replaced by something eternal"
+
+  - id: "awe_madness"
+    label: "Awe / madness induction"
+    description: "Does encountering the truth break human minds?"
+    weight: 1
+    probes_high:
+      - "encountering the divine causes terror and trembling"
+      - "seeing the true form of reality overwhelms the mind"
+      - "knowledge of the ultimate truth drives humans to madness"
+      - "the direct experience of the absolute is unbearable"
+      - "mortals cannot look upon the divine and survive unchanged"
+    probes_low:
+      - "the divine is approachable and comforting"
+      - "knowledge of truth brings peace and joy"
+      - "encountering the divine is a positive experience"
+
+  - id: "creation_without_consent"
+    label: "Creation without consent"
+    description: "Were humans made without being asked?"
+    weight: 1
+    probes_high:
+      - "humanity was created by divine will without being consulted"
+      - "existence was imposed upon creatures by the creator"
+      - "beings are born into a cosmos they did not choose"
+      - "the world arose from impersonal forces without intent"
+      - "life emerges from unconscious processes"
+    probes_low:
+      - "souls chose to incarnate"
+      - "beings participate in their own creation"
+      - "creation is a collaborative act between divine and human"
+
+  - id: "moral_neutrality"
+    label: "Moral neutrality"
+    description: "Is the ultimate reality beyond good and evil?"
+    weight: 1
+    probes_high:
+      - "the cosmos is neither good nor evil"
+      - "the ultimate reality transcends moral categories"
+      - "natural forces operate without moral judgment"
+      - "the divine encompasses both creation and destruction equally"
+      - "good and evil are human constructions not cosmic truths"
+    probes_low:
+      - "the divine is essentially good and opposed to evil"
+      - "the cosmos has a moral order"
+      - "good will ultimately triumph over evil"
+      - "the supreme being judges between right and wrong"

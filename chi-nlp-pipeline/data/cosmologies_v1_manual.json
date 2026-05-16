@@ -1,0 +1,694 @@
+{
+  "metadata": {
+    "title": "Cosmic Horror Index Dataset",
+    "version": "1.0.0",
+    "description": "Structured scoring of cosmological systems against Lovecraftian cosmic horror axes",
+    "methodology": {
+      "axes": [
+        {
+          "id": "omniscience",
+          "label": "Omniscience",
+          "description": "Does the entity/system know everything?",
+          "weight": 1
+        },
+        {
+          "id": "omnipotence",
+          "label": "Omnipotence",
+          "description": "Can it do anything?",
+          "weight": 1
+        },
+        {
+          "id": "self_sufficiency",
+          "label": "Self-sufficiency",
+          "description": "Does it need anything from creation?",
+          "weight": 1
+        },
+        {
+          "id": "indifference",
+          "label": "Indifference",
+          "description": "Does it care about humans?",
+          "weight": 2
+        },
+        {
+          "id": "incomprehensibility",
+          "label": "Incomprehensibility",
+          "description": "Can humans understand it?",
+          "weight": 2
+        },
+        {
+          "id": "human_insignificance",
+          "label": "Human insignificance",
+          "description": "Do humans matter in this system?",
+          "weight": 2
+        },
+        {
+          "id": "cyclical_destruction",
+          "label": "Cyclical destruction",
+          "description": "Does the cosmos destroy and rebuild?",
+          "weight": 1
+        },
+        {
+          "id": "awe_madness",
+          "label": "Awe / madness induction",
+          "description": "Does encountering the truth break humans?",
+          "weight": 1
+        },
+        {
+          "id": "creation_without_consent",
+          "label": "Creation without consent",
+          "description": "Were humans made without being asked?",
+          "weight": 1
+        },
+        {
+          "id": "moral_neutrality",
+          "label": "Moral neutrality",
+          "description": "Is it beyond good and evil?",
+          "weight": 1
+        }
+      ],
+      "chi_formula": "weighted_mean(axes, weights) where indifference, incomprehensibility, human_insignificance are 2x weighted",
+      "scoring_basis": "Primary theological/philosophical claims from canonical texts, not popular understanding. 0 = anti-Lovecraftian, 100 = peak cosmic horror."
+    }
+  },
+  "cosmologies": [
+    {
+      "id": "lovecraft",
+      "name": "Lovecraft (Outer Gods)",
+      "category": "baseline",
+      "color": "#534AB7",
+      "scores": {
+        "omniscience": 90,
+        "omnipotence": 95,
+        "self_sufficiency": 100,
+        "indifference": 95,
+        "incomprehensibility": 90,
+        "human_insignificance": 95,
+        "cyclical_destruction": 70,
+        "awe_madness": 95,
+        "creation_without_consent": 90,
+        "moral_neutrality": 95
+      },
+      "chi": 91.9,
+      "key_entities": [
+        "Azathoth",
+        "Yog-Sothoth",
+        "Nyarlathotep",
+        "Shub-Niggurath",
+        "Cthulhu"
+      ],
+      "summary": "The baseline comparator. Blind idiot god at center of infinity. System explicitly designed to demonstrate human irrelevance.",
+      "key_texts": [
+        "The Call of Cthulhu",
+        "The Dunwich Horror",
+        "At the Mountains of Madness"
+      ]
+    },
+    {
+      "id": "advaita_vedanta",
+      "name": "Hinduism (Advaita / Nirguna Brahman)",
+      "category": "south_asian",
+      "color": "#D85A30",
+      "scores": {
+        "omniscience": 95,
+        "omnipotence": 95,
+        "self_sufficiency": 100,
+        "indifference": 80,
+        "incomprehensibility": 95,
+        "human_insignificance": 90,
+        "cyclical_destruction": 85,
+        "awe_madness": 70,
+        "creation_without_consent": 95,
+        "moral_neutrality": 85
+      },
+      "chi": 88.8,
+      "key_entities": [
+        "Nirguna Brahman",
+        "Maya",
+        "Atman"
+      ],
+      "summary": "Formless, attributeless ultimate reality. Material world is illusion. Individual selfhood is illusion. You ARE the cosmic entity and don't know it.",
+      "key_texts": [
+        "Upanishads",
+        "Brahma Sutras",
+        "Mandukya Upanishad"
+      ]
+    },
+    {
+      "id": "buddhism",
+      "name": "Buddhism (Sunyata / Theravada)",
+      "category": "south_asian",
+      "color": "#888780",
+      "scores": {
+        "omniscience": 50,
+        "omnipotence": 20,
+        "self_sufficiency": 100,
+        "indifference": 90,
+        "incomprehensibility": 80,
+        "human_insignificance": 95,
+        "cyclical_destruction": 85,
+        "awe_madness": 60,
+        "creation_without_consent": 70,
+        "moral_neutrality": 95
+      },
+      "chi": 77.7,
+      "key_entities": [
+        "Sunyata",
+        "Dukkha",
+        "Anatta"
+      ],
+      "summary": "No god. Emptiness is ultimate reality. Self is illusion. Suffering is structural. Cosmos cycles endlessly with no author or purpose.",
+      "key_texts": [
+        "Heart Sutra",
+        "Pali Canon",
+        "Nagarjuna's Mulamadhyamakakarika"
+      ]
+    },
+    {
+      "id": "atheism",
+      "name": "Atheism (Materialist)",
+      "category": "irreligious",
+      "color": "#2C2C2A",
+      "scores": {
+        "omniscience": 0,
+        "omnipotence": 0,
+        "self_sufficiency": 100,
+        "indifference": 100,
+        "incomprehensibility": 50,
+        "human_insignificance": 100,
+        "cyclical_destruction": 60,
+        "awe_madness": 30,
+        "creation_without_consent": 100,
+        "moral_neutrality": 100
+      },
+      "chi": 68.5,
+      "key_entities": [],
+      "summary": "No god. No consciousness behind the universe. No design, no purpose. Matter and energy governed by impersonal laws. More indifferent than Lovecraft because there's not even an entity to be indifferent.",
+      "key_texts": [
+        "The Selfish Gene (Dawkins)",
+        "A Universe from Nothing (Krauss)"
+      ]
+    },
+    {
+      "id": "gnosticism",
+      "name": "Gnosticism",
+      "category": "esoteric",
+      "color": "#D4537E",
+      "scores": {
+        "omniscience": 70,
+        "omnipotence": 60,
+        "self_sufficiency": 80,
+        "indifference": 85,
+        "incomprehensibility": 90,
+        "human_insignificance": 80,
+        "cyclical_destruction": 40,
+        "awe_madness": 80,
+        "creation_without_consent": 95,
+        "moral_neutrality": 70
+      },
+      "chi": 77.3,
+      "key_entities": [
+        "Demiurge/Yaldabaoth",
+        "Monad/Pleroma",
+        "Sophia"
+      ],
+      "summary": "Material world is a prison created by a flawed, ignorant deity. True God is beyond reach. Structurally identical to Lovecraft's entity hierarchy.",
+      "key_texts": [
+        "Apocryphon of John",
+        "Gospel of Truth",
+        "Pistis Sophia"
+      ]
+    },
+    {
+      "id": "absurdism",
+      "name": "Absurdism (Camus)",
+      "category": "irreligious",
+      "color": "#D3D1C7",
+      "scores": {
+        "omniscience": 0,
+        "omnipotence": 0,
+        "self_sufficiency": 100,
+        "indifference": 100,
+        "incomprehensibility": 70,
+        "human_insignificance": 95,
+        "cyclical_destruction": 50,
+        "awe_madness": 60,
+        "creation_without_consent": 100,
+        "moral_neutrality": 100
+      },
+      "chi": 72.3,
+      "key_entities": [
+        "The Absurd",
+        "Sisyphus"
+      ],
+      "summary": "The universe is meaningless and you must live in it. Lovecraft's emotional register with a human survival strategy bolted on.",
+      "key_texts": [
+        "The Myth of Sisyphus",
+        "The Stranger",
+        "The Rebel"
+      ]
+    },
+    {
+      "id": "daoism",
+      "name": "Daoism (Dao / Wu Wei)",
+      "category": "east_asian",
+      "color": "#97C459",
+      "scores": {
+        "omniscience": 60,
+        "omnipotence": 60,
+        "self_sufficiency": 100,
+        "indifference": 75,
+        "incomprehensibility": 85,
+        "human_insignificance": 75,
+        "cyclical_destruction": 70,
+        "awe_madness": 40,
+        "creation_without_consent": 80,
+        "moral_neutrality": 90
+      },
+      "chi": 74.6,
+      "key_entities": [
+        "Dao",
+        "Wu Wei",
+        "De"
+      ],
+      "summary": "Nameless, formless source of all. Indifferent but harmonizable. Same cosmology as Lovecraft with a survival manual attached.",
+      "key_texts": [
+        "Dao De Jing",
+        "Zhuangzi"
+      ]
+    },
+    {
+      "id": "aztec",
+      "name": "Aztec (Five Suns)",
+      "category": "mesoamerican",
+      "color": "#854F0B",
+      "scores": {
+        "omniscience": 60,
+        "omnipotence": 85,
+        "self_sufficiency": 40,
+        "indifference": 50,
+        "incomprehensibility": 65,
+        "human_insignificance": 60,
+        "cyclical_destruction": 95,
+        "awe_madness": 85,
+        "creation_without_consent": 80,
+        "moral_neutrality": 80
+      },
+      "chi": 67.3,
+      "key_entities": [
+        "Tezcatlipoca",
+        "Quetzalcoatl",
+        "Huitzilopochtli"
+      ],
+      "summary": "Gods already destroyed world four times. Current sun will also end. Most transactional theology: feed gods blood or existence stops.",
+      "key_texts": [
+        "Codex Chimalpopoca",
+        "Florentine Codex"
+      ]
+    },
+    {
+      "id": "deism",
+      "name": "Deism (Clockmaker God)",
+      "category": "irreligious",
+      "color": "#B4B2A9",
+      "scores": {
+        "omniscience": 50,
+        "omnipotence": 80,
+        "self_sufficiency": 100,
+        "indifference": 90,
+        "incomprehensibility": 60,
+        "human_insignificance": 85,
+        "cyclical_destruction": 30,
+        "awe_madness": 20,
+        "creation_without_consent": 90,
+        "moral_neutrality": 85
+      },
+      "chi": 71.2,
+      "key_entities": [
+        "The Clockmaker"
+      ],
+      "summary": "God created the universe and left. No miracles, no prayer, no relationship. Designed and abandoned.",
+      "key_texts": [
+        "Voltaire's Philosophical Dictionary",
+        "Paine's Age of Reason"
+      ]
+    },
+    {
+      "id": "jainism",
+      "name": "Jainism",
+      "category": "south_asian",
+      "color": "#5F5E5A",
+      "scores": {
+        "omniscience": 40,
+        "omnipotence": 10,
+        "self_sufficiency": 100,
+        "indifference": 85,
+        "incomprehensibility": 60,
+        "human_insignificance": 80,
+        "cyclical_destruction": 70,
+        "awe_madness": 30,
+        "creation_without_consent": 50,
+        "moral_neutrality": 90
+      },
+      "chi": 64.6,
+      "key_entities": [
+        "Jiva",
+        "Ajiva",
+        "Karma (as physics)"
+      ],
+      "summary": "No creator god. Universe is eternal and self-existing. Karma as impersonal force like gravity. Cosmos indifferent by structural necessity.",
+      "key_texts": [
+        "Tattvartha Sutra",
+        "Jain Agamas"
+      ]
+    },
+    {
+      "id": "pantheism",
+      "name": "Pantheism (Spinoza)",
+      "category": "irreligious",
+      "color": "#639922",
+      "scores": {
+        "omniscience": 70,
+        "omnipotence": 70,
+        "self_sufficiency": 100,
+        "indifference": 70,
+        "incomprehensibility": 60,
+        "human_insignificance": 80,
+        "cyclical_destruction": 60,
+        "awe_madness": 30,
+        "creation_without_consent": 90,
+        "moral_neutrality": 80
+      },
+      "chi": 70.8,
+      "key_entities": [
+        "Deus sive Natura"
+      ],
+      "summary": "God IS the universe. Every earthquake, extinction, and supernova is equally divine. Net moral valence: neutral.",
+      "key_texts": [
+        "Spinoza's Ethics"
+      ]
+    },
+    {
+      "id": "norse",
+      "name": "Norse (Ragnarok cycle)",
+      "category": "northern_european",
+      "color": "#E24B4A",
+      "scores": {
+        "omniscience": 50,
+        "omnipotence": 70,
+        "self_sufficiency": 30,
+        "indifference": 50,
+        "incomprehensibility": 45,
+        "human_insignificance": 60,
+        "cyclical_destruction": 95,
+        "awe_madness": 80,
+        "creation_without_consent": 80,
+        "moral_neutrality": 70
+      },
+      "chi": 60.4,
+      "key_entities": [
+        "Odin",
+        "Fenrir",
+        "Jormungandr",
+        "Ragnarok"
+      ],
+      "summary": "Gods are mortal and know they will die. Cosmic horror with existential courage as the response. Camus avant la lettre.",
+      "key_texts": [
+        "Prose Edda",
+        "Poetic Edda",
+        "Voluspa"
+      ]
+    },
+    {
+      "id": "egyptian",
+      "name": "Ancient Egyptian (Heliopolitan)",
+      "category": "ancient_mediterranean",
+      "color": "#EF9F27",
+      "scores": {
+        "omniscience": 70,
+        "omnipotence": 80,
+        "self_sufficiency": 60,
+        "indifference": 55,
+        "incomprehensibility": 60,
+        "human_insignificance": 50,
+        "cyclical_destruction": 70,
+        "awe_madness": 65,
+        "creation_without_consent": 85,
+        "moral_neutrality": 55
+      },
+      "chi": 62.7,
+      "key_entities": [
+        "Atum",
+        "Nun",
+        "Ma'at",
+        "Ra"
+      ],
+      "summary": "Creator god self-emerged from chaos, will destroy everything and return to chaos. Cosmos is temporary order floating on infinite void.",
+      "key_texts": [
+        "Pyramid Texts",
+        "Book of the Dead Ch. 175",
+        "Coffin Texts"
+      ]
+    },
+    {
+      "id": "agnosticism",
+      "name": "Agnosticism",
+      "category": "irreligious",
+      "color": "#444441",
+      "scores": {
+        "omniscience": 0,
+        "omnipotence": 0,
+        "self_sufficiency": 50,
+        "indifference": 70,
+        "incomprehensibility": 95,
+        "human_insignificance": 70,
+        "cyclical_destruction": 50,
+        "awe_madness": 50,
+        "creation_without_consent": 50,
+        "moral_neutrality": 80
+      },
+      "chi": 57.7,
+      "key_entities": [],
+      "summary": "Cannot know whether cosmic entity exists or cares. Maps to Lovecraftian epistemology: the pre-horror state of not-knowing.",
+      "key_texts": [
+        "Huxley's essays",
+        "Russell's Why I Am Not a Christian"
+      ]
+    },
+    {
+      "id": "greek",
+      "name": "Ancient Greek (Olympian + Primordial)",
+      "category": "ancient_mediterranean",
+      "color": "#7F77DD",
+      "scores": {
+        "omniscience": 60,
+        "omnipotence": 70,
+        "self_sufficiency": 30,
+        "indifference": 55,
+        "incomprehensibility": 40,
+        "human_insignificance": 65,
+        "cyclical_destruction": 50,
+        "awe_madness": 50,
+        "creation_without_consent": 80,
+        "moral_neutrality": 70
+      },
+      "chi": 56.2,
+      "key_entities": [
+        "Khaos",
+        "Nyx",
+        "Titans",
+        "Olympians"
+      ],
+      "summary": "Layered cosmology. Surface: soap opera gods. Deeper: Titans. Deepest: primordial void (Khaos). Each layer down is more Lovecraftian.",
+      "key_texts": [
+        "Hesiod's Theogony",
+        "Orphic Hymns"
+      ]
+    },
+    {
+      "id": "bhakti_hinduism",
+      "name": "Hinduism (Bhakti / Saguna Brahman)",
+      "category": "south_asian",
+      "color": "#993C1D",
+      "scores": {
+        "omniscience": 90,
+        "omnipotence": 90,
+        "self_sufficiency": 70,
+        "indifference": 30,
+        "incomprehensibility": 50,
+        "human_insignificance": 40,
+        "cyclical_destruction": 80,
+        "awe_madness": 55,
+        "creation_without_consent": 75,
+        "moral_neutrality": 40
+      },
+      "chi": 56.9,
+      "key_entities": [
+        "Krishna",
+        "Vishnu",
+        "Shiva (personal aspect)"
+      ],
+      "summary": "Personal, relational God. Reciprocal devotion. But Bhagavad Gita Ch.11 universal form scene IS a cosmic horror moment \u2014 then Krishna says 'don't be afraid.'",
+      "key_texts": [
+        "Bhagavad Gita",
+        "Bhagavata Purana"
+      ]
+    },
+    {
+      "id": "roman",
+      "name": "Roman (State Religion)",
+      "category": "ancient_mediterranean",
+      "color": "#AFA9EC",
+      "scores": {
+        "omniscience": 50,
+        "omnipotence": 65,
+        "self_sufficiency": 25,
+        "indifference": 50,
+        "incomprehensibility": 30,
+        "human_insignificance": 55,
+        "cyclical_destruction": 40,
+        "awe_madness": 35,
+        "creation_without_consent": 75,
+        "moral_neutrality": 65
+      },
+      "chi": 48.1,
+      "key_entities": [
+        "Jupiter",
+        "Pax Deorum",
+        "Fatum"
+      ],
+      "summary": "Transactional religion. Gods are business partners. Predictable and manageable if you follow the rules.",
+      "key_texts": [
+        "Cicero's De Natura Deorum",
+        "Ovid's Metamorphoses"
+      ]
+    },
+    {
+      "id": "shinto",
+      "name": "Shinto (Kami)",
+      "category": "east_asian",
+      "color": "#F09595",
+      "scores": {
+        "omniscience": 30,
+        "omnipotence": 40,
+        "self_sufficiency": 20,
+        "indifference": 40,
+        "incomprehensibility": 30,
+        "human_insignificance": 20,
+        "cyclical_destruction": 30,
+        "awe_madness": 30,
+        "creation_without_consent": 30,
+        "moral_neutrality": 50
+      },
+      "chi": 31.5,
+      "key_entities": [
+        "Kami",
+        "Amaterasu",
+        "Izanagi/Izanami"
+      ],
+      "summary": "Anti-Lovecraft. Local, relatable spirits in nature. Human-scale relationships. Inverts every Lovecraftian parameter.",
+      "key_texts": [
+        "Kojiki",
+        "Nihon Shoki"
+      ]
+    }
+  ],
+  "comparisons": {
+    "annihilation": {
+      "title": "Annihilation (VanderMeer, 2014)",
+      "dimensions": [
+        {
+          "axis": "Entity identifiability",
+          "lovecraft": 85,
+          "annihilation": 15,
+          "lovecraft_note": "Named beings you can point at",
+          "annihilation_note": "Diffuse process with no center"
+        },
+        {
+          "axis": "Indifference",
+          "lovecraft": 95,
+          "annihilation": 40,
+          "lovecraft_note": "Maximum \u2014 they don't notice you",
+          "annihilation_note": "Not indifferent \u2014 actively interested (as material)"
+        },
+        {
+          "axis": "Human destruction",
+          "lovecraft": 95,
+          "annihilation": 50,
+          "lovecraft_note": "Madness and death, always",
+          "annihilation_note": "Transformation, sometimes functional"
+        },
+        {
+          "axis": "Incomprehensibility",
+          "lovecraft": 90,
+          "annihilation": 85,
+          "lovecraft_note": "Non-Euclidean geometry breaks minds",
+          "annihilation_note": "Biology at impossible complexity breaks categories"
+        },
+        {
+          "axis": "Environmental horror",
+          "lovecraft": 40,
+          "annihilation": 95,
+          "lovecraft_note": "Built environments (cities, geometry)",
+          "annihilation_note": "Nature itself IS the mechanism"
+        },
+        {
+          "axis": "Beauty as horror",
+          "lovecraft": 10,
+          "annihilation": 90,
+          "lovecraft_note": "No beauty \u2014 only dread",
+          "annihilation_note": "Maximum \u2014 the horror is gorgeous"
+        },
+        {
+          "axis": "Protagonist agency",
+          "lovecraft": 10,
+          "annihilation": 60,
+          "lovecraft_note": "Zero \u2014 always a victim",
+          "annihilation_note": "Biologist actively chooses to transform"
+        },
+        {
+          "axis": "Border permeability",
+          "lovecraft": 30,
+          "annihilation": 90,
+          "lovecraft_note": "One-way knowledge threshold",
+          "annihilation_note": "Expanding physical membrane"
+        },
+        {
+          "axis": "Body horror",
+          "lovecraft": 30,
+          "annihilation": 95,
+          "lovecraft_note": "Minimal \u2014 horror is mental",
+          "annihilation_note": "Maximum \u2014 DNA rewritten"
+        },
+        {
+          "axis": "Ecological awareness",
+          "lovecraft": 5,
+          "annihilation": 95,
+          "lovecraft_note": "Nature is backdrop",
+          "annihilation_note": "Nature is protagonist"
+        },
+        {
+          "axis": "Hope / liberation",
+          "lovecraft": 0,
+          "annihilation": 40,
+          "lovecraft_note": "None \u2014 only madness or death",
+          "annihilation_note": "Ambiguous \u2014 transformation may be liberation"
+        },
+        {
+          "axis": "Anthropocene relevance",
+          "lovecraft": 10,
+          "annihilation": 95,
+          "lovecraft_note": "Pre-ecological",
+          "annihilation_note": "Directly addresses ecological collapse"
+        }
+      ],
+      "paradigm_shifts": [
+        "Indifference \u2192 Integration",
+        "Madness \u2192 Metamorphosis",
+        "Architecture \u2192 Ecology",
+        "Rejection \u2192 Embrace",
+        "Masculine rationalist \u2192 Ecological participant",
+        "Static void \u2192 Expanding process"
+      ]
+    }
+  }
+}

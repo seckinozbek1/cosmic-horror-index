@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cosmic Horror Index</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#fafaf8;--card:#fff;--tx:#1a1a1a;--mx:#666;--hx:#999;--bd:rgba(0,0,0,0.1);--sf:#f1efe8;--r8:8px;--r12:12px;--purple:#534AB7;--teal:#1D9E75;--coral:#D85A30;--red:#E24B4A;--amber:#BA7517;--gray:#888780;--pink:#D4537E;--blue:#378ADD}
+@media(prefers-color-scheme:dark){:root{--bg:#1a1a1a;--card:#242424;--tx:#e8e8e8;--mx:#999;--hx:#666;--bd:rgba(255,255,255,0.1);--sf:#2a2a2a}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx);line-height:1.6;max-width:840px;margin:0 auto;padding:2rem 1.5rem}
+h1{font-size:1.75rem;font-weight:600;margin-bottom:.25rem}
+h2{font-size:1.1rem;font-weight:600;margin:1.5rem 0 .75rem}
+.sub{font-size:1rem;color:var(--mx);margin-bottom:1.5rem}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.5rem}
+.tab{padding:6px 14px;border-radius:var(--r8);font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--card);color:var(--mx);transition:all .15s}
+.tab:hover{background:var(--sf)}.tab.on{background:var(--purple);color:#fff;border-color:var(--purple)}
+.pnl{display:none}.pnl.show{display:block}
+.src-tog{display:flex;align-items:center;gap:8px;margin-bottom:1.5rem;font-size:13px;color:var(--mx);padding:10px 14px;background:var(--sf);border-radius:var(--r12)}
+.src-tog select{padding:4px 8px;border-radius:var(--r8);border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:13px}
+.cat-row{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:1rem}
+.cb{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--card);color:var(--mx)}
+.cb:hover{background:var(--sf)}.cb.on{background:var(--purple);color:#fff;border-color:var(--purple)}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:1.5rem}
+.stat{background:var(--sf);border-radius:var(--r8);padding:12px 14px}.stat .sl{font-size:11px;color:var(--mx);margin-bottom:2px}.stat .sv{font-size:20px;font-weight:600}
+.rr{display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .1s;border-radius:4px}
+.rr:hover{background:var(--sf)}
+.rn{font-size:1.2rem;font-weight:600;width:30px;min-width:30px;text-align:center}
+.rb{flex:1;height:26px;background:var(--sf);border-radius:4px;overflow:hidden;position:relative}
+.rf{height:100%;border-radius:4px;transition:width .4s}
+.rl{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:calc(100% - 20px)}
+.rl.dk{color:var(--tx)}.rl.lt{color:#fff}
+.rv{font-size:14px;font-weight:600;min-width:40px;text-align:right}
+.det{background:var(--card);border:1px solid var(--bd);border-radius:var(--r12);padding:1.25rem;margin:8px 0 16px;display:none}
+.det.show{display:block}
+.det .nm{font-size:1.1rem;font-weight:600;margin-bottom:2px}
+.det .ct{font-size:12px;color:var(--mx);margin-bottom:10px}
+.det .sm{font-size:14px;color:var(--mx);line-height:1.6;margin-bottom:12px}
+.br{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.bl{font-size:11px;color:var(--mx);width:130px;min-width:130px;text-align:right}
+.bt{flex:1;height:12px;background:var(--sf);border-radius:3px;overflow:hidden}
+.bf{height:100%;border-radius:3px;transition:width .3s}
+.bv{font-size:11px;min-width:28px;color:var(--mx)}
+.ci{font-size:10px;color:var(--mx);min-width:70px}
+.ev-sec{margin-top:12px;padding-top:12px;border-top:1px solid var(--bd)}
+.ev-sec h3{font-size:13px;font-weight:500;margin-bottom:8px;color:var(--mx)}
+.ev-c{background:var(--sf);border-radius:var(--r8);padding:10px 12px;margin-bottom:6px;font-size:12px}
+.ev-c .es{font-weight:500;margin-bottom:2px}.ev-c .er{color:var(--mx);font-size:11px;margin-bottom:4px}
+.ev-c .eq{color:var(--tx);line-height:1.5;font-style:italic;margin-bottom:4px}
+.ev-c .ej{color:var(--mx);font-size:11px}
+.ev-c .em{display:flex;gap:8px;font-size:10px;color:var(--mx);margin-top:4px;flex-wrap:wrap}
+.ev-c .em span{background:var(--card);padding:2px 6px;border-radius:4px}
+.method p{font-size:14px;color:var(--mx);line-height:1.7;margin-bottom:1rem}
+.ax-d{background:var(--card);border:1px solid var(--bd);border-radius:var(--r8);padding:10px 14px;margin-bottom:6px}
+.ax-d .an{font-size:13px;font-weight:500}.ax-d .ad{font-size:12px;color:var(--mx)}.ax-d .aw{font-size:11px;color:var(--purple);font-weight:500;margin-left:6px}
+footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--bd);font-size:12px;color:var(--hx);text-align:center}
+footer a{color:var(--purple)}
+</style>
+</head>
+<body>
+<h1>The Cosmic Horror Index</h1>
+<p class="sub">Rating every cosmology on the Lovecraft scale — grounded in sacred texts</p>
+<div class="tabs" id="tabs"></div>
+<div class="pnl" id="p-rank"></div>
+<div class="pnl" id="p-cmp"></div>
+<div class="pnl" id="p-mth"></div>
+<footer>Cosmic Horror Index — NLP-grounded comparative cosmology<br><a href="https://github.com/seckinozbek1/cosmic-horror-index">GitHub</a></footer>
+<script>
+let D=null,V2=null,tab='rank',catF='all',openD=null,dm='v1';
+Promise.allSettled([
+  fetch('output/chi_dataset_grounded.json').then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>{V2=d;dm='v2'}),
+  fetch('data/cosmologies_v1_manual.json').then(r=>r.json()).then(d=>{D=d})
+]).then(()=>{if(D||V2)render();else document.getElementById('p-rank').innerHTML='<p style="color:var(--mx)">No data found. Run the pipeline or add data files.</p>';document.querySelectorAll('.pnl')[0].classList.add('show');});
+
+function gc(){return dm==='v2'&&V2?V2.cosmologies:D?D.cosmologies:[];}
+function ga(){return dm==='v2'&&V2?V2.metadata.methodology.axes:D?D.metadata.methodology.axes:[];}
+function gs(c,a){const s=c.scores[a];return typeof s==='object'?s.score||50:s||50;}
+function gci(c,a){const s=c.scores[a];return typeof s==='object'?{l:s.ci_low,h:s.ci_high,n:s.n_passages}:null;}
+function gev(c,a){const s=c.scores[a];return typeof s==='object'?s.evidence||[]:[];}
+function chi(c,ax){let w=0,t=0;ax.forEach(a=>{w+=gs(c,a.id)*a.weight;t+=a.weight;});return Math.round(w/t*10)/10;}
+function cc(v){return v>=80?'var(--red)':v>=60?'var(--amber)':v>=40?'var(--gray)':'var(--teal)';}
+function render(){rT();rR();rC();rM();sw('rank');}
+function rT(){document.getElementById('tabs').innerHTML=[{i:'rank',l:'Rankings'},{i:'cmp',l:'Compare'},{i:'mth',l:'Methodology'}].map(t=>`<button class="tab${tab===t.i?' on':''}" onclick="sw('${t.i}')">${t.l}</button>`).join('');}
+function sw(i){tab=i;rT();document.querySelectorAll('.pnl').forEach(p=>p.classList.remove('show'));document.getElementById('p-'+i).classList.add('show');}
+function rR(){
+const cs=gc(),ax=ga();if(!cs.length)return;
+const cats=[...new Set(cs.map(c=>c.category||'unknown'))];
+const its=catF==='all'?cs:cs.filter(c=>(c.category||'unknown')===catF);
+const rk=[...its].map(c=>({...c,ch:c.chi||chi(c,ax)})).sort((a,b)=>b.ch-a.ch);
+let h='';
+if(V2&&D)h+=`<div class="src-tog"><span>Data source:</span><select onchange="dm=this.value;openD=null;rR();rC()"><option value="v1"${dm==='v1'?' selected':''}>v1 — Manual scoring</option><option value="v2"${dm==='v2'?' selected':''}>v2 — NLP-grounded</option></select></div>`;
+const avg=rk.reduce((s,r)=>s+r.ch,0)/rk.length;
+const a50=rk.filter(r=>r.ch>=50).length;
+h+=`<div class="stats-row"><div class="stat"><div class="sl">Systems</div><div class="sv">${rk.length}</div></div><div class="stat"><div class="sl">Mean CHI</div><div class="sv">${Math.round(avg)}</div></div><div class="stat"><div class="sl">Above 50</div><div class="sv">${a50}/${rk.length}</div></div><div class="stat"><div class="sl">Source</div><div class="sv" style="font-size:14px">${dm==='v2'?'NLP-grounded':'Manual'}</div></div></div>`;
+h+='<div class="cat-row"><button class="cb'+(catF==='all'?' on':'')+'" onclick="catF=\'all\';openD=null;rR()">All</button>';
+cats.forEach(c=>{h+=`<button class="cb${catF===c?' on':''}" onclick="catF='${c}';openD=null;rR()">${(c||'').replace(/_/g,' ')}</button>`;});h+='</div>';
+rk.forEach((r,i)=>{
+const w=Math.max(r.ch,10),ti=w>30,co=r.color||'var(--purple)';
+h+=`<div class="rr" onclick="openD=openD==='${r.id}'?null:'${r.id}';rR()"><div class="rn" style="color:${cc(r.ch)}">${i+1}</div><div class="rb"><div class="rf" style="width:${w}%;background:${co}"></div><div class="rl ${ti?'lt':'dk'}">${r.name||r.id}</div></div><div class="rv" style="color:${cc(r.ch)}">${r.ch}</div></div>`;
+const io=openD===r.id;
+h+=`<div class="det${io?' show':''}">`;
+h+=`<div class="nm" style="color:${co}">${r.name||r.id}</div>`;
+h+=`<div class="ct">${(r.category||'').replace(/_/g,' ')} · CHI: ${r.ch}</div>`;
+if(r.summary)h+=`<div class="sm">${r.summary}</div>`;
+ax.forEach(a=>{
+const sc=Math.round(gs(r,a.id)),ci=gci(r,a.id),ev=gev(r,a.id);
+h+=`<div class="br"><div class="bl">${a.label}${a.weight>1?' (2x)':''}</div><div class="bt"><div class="bf" style="width:${sc}%;background:${co}"></div></div><div class="bv">${sc}</div>`;
+if(ci)h+=`<div class="ci">[${Math.round(ci.l)}-${Math.round(ci.h)}] n=${ci.n||'?'}</div>`;
+h+=`</div>`;
+if(ev.length&&io){h+=`<div class="ev-sec"><h3>Evidence: ${a.label}</h3>`;
+ev.slice(0,3).forEach(e=>{
+h+=`<div class="ev-c"><div class="es">${e.source||''}</div><div class="er">${e.reference||''}</div>`;
+if(e.text)h+=`<div class="eq">"${e.text.substring(0,280)}${e.text.length>280?'...':''}"</div>`;
+if(e.justification)h+=`<div class="ej">${e.justification}</div>`;
+h+=`<div class="em"><span>Rel: ${(e.relevance||0).toFixed(2)}</span><span>Val: ${(e.valence||0)>0?'+':''}${(e.valence||0).toFixed(2)}</span><span>Conf: ${(e.confidence||0).toFixed(2)}</span></div></div>`;});
+h+=`</div>`;}});
+if(r.d)h+=`<div class="sm" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--bd)">${r.d}</div>`;
+h+=`</div>`;});
+document.getElementById('p-rank').innerHTML=h;}
+function rC(){
+const cs=gc(),ax=ga();if(!cs.length)return;
+const sk=[...cs].map(c=>({...c,ch:c.chi||chi(c,ax)})).sort((a,b)=>b.ch-a.ch);
+let h='<h2>All systems × all axes</h2><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px"><tr style="border-bottom:2px solid var(--bd)"><th style="text-align:left;padding:6px">System</th><th style="padding:6px">CHI</th>';
+ax.forEach(a=>{h+=`<th style="padding:6px;writing-mode:vertical-lr;max-width:30px">${a.label.substring(0,12)}</th>`;});
+h+='</tr>';sk.forEach(r=>{h+=`<tr style="border-bottom:1px solid var(--bd)"><td style="padding:6px;font-weight:500;color:${r.color||'var(--tx)'}">${(r.name||r.id).substring(0,28)}</td><td style="padding:6px;text-align:center;font-weight:600;color:${cc(r.ch)}">${r.ch}</td>`;
+ax.forEach(a=>{const v=Math.round(gs(r,a.id));const bg=v>=80?'rgba(226,75,74,0.15)':v>=60?'rgba(186,117,23,0.15)':v>=40?'rgba(136,135,128,0.1)':'rgba(29,158,117,0.15)';h+=`<td style="padding:6px;text-align:center;background:${bg}">${v}</td>`;});
+h+='</tr>';});h+='</table></div>';document.getElementById('p-cmp').innerHTML=h;}
+function rM(){
+const ax=ga();let h=`<div class="method"><h2>What is the Cosmic Horror Index?</h2><p>The CHI measures structural similarity between a cosmological system and Lovecraft's vision of an indifferent, incomprehensible universe.</p><p><strong>v1 (manual):</strong> Scored 0-100 per axis from scholarly reading.</p><p><strong>v2 (NLP-grounded):</strong> Sacred texts chunked → embedded (SentenceTransformer) → retrieved via FAISS → classified by Claude Sonnet (relevance/valence/confidence per passage) → aggregated with bootstrap CIs. Every score traces to specific textual passages.</p><h2>The ten axes</h2>`;
+ax.forEach(a=>{h+=`<div class="ax-d"><div class="an">${a.label}${a.weight>1?'<span class="aw">2x weight</span>':''}</div><div class="ad">${a.description}</div></div>`;});
+h+=`<h2>CHI formula</h2><p><code>CHI = weighted_mean(all_axes)</code> — indifference, incomprehensibility, and human insignificance at 2x weight. Scale: 0 = anti-Lovecraftian → 100 = peak cosmic horror.</p></div>`;
+document.getElementById('p-mth').innerHTML=h;}
+</script>
+</body>
+</html>
