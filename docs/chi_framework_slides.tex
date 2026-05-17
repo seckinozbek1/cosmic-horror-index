@@ -102,17 +102,17 @@
 \begin{frame}{NLP Pipeline}
   \begin{center}
   \begin{tikzpicture}[
-    node distance=0.7cm,
+    node distance=0.5cm,
     box/.style={rectangle, rounded corners=3pt, draw=accent, fill=axisweight2,
-                minimum width=1.5cm, minimum height=0.65cm, font=\scriptsize, align=center},
+                minimum width=1.3cm, minimum height=0.65cm, font=\scriptsize, align=center},
     arr/.style={->, thick, color=accent}
   ]
-    \node[box] (corpus)   {Corpus\\download};
-    \node[box] (chunk)    [right=of corpus]  {Chunk\\(256 tok)};
-    \node[box] (embed)    [right=of chunk]   {Embed\\MiniLM};
-    \node[box] (retrieve) [right=of embed]   {Retrieve\\FAISS};
-    \node[box] (classify) [right=of retrieve]{Classify\\Claude};
-    \node[box] (agg)      [right=of classify]{Aggregate\\$+$ CI};
+    \node[box] (corpus)   {Corpus};
+    \node[box] (chunk)    [right=of corpus]  {Chunk};
+    \node[box] (embed)    [right=of chunk]   {Embed};
+    \node[box] (retrieve) [right=of embed]   {Retrieve};
+    \node[box] (classify) [right=of retrieve]{Classify};
+    \node[box] (agg)      [right=of classify]{Aggregate};
 
     \draw[arr] (corpus)   -- (chunk);
     \draw[arr] (chunk)    -- (embed);
