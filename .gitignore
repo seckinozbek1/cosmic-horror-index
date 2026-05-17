@@ -46,7 +46,7 @@ check_retrieval.py
 # Output artifacts — KEEP in git
 !output/chi_dataset_grounded.json
 !output/evidence_document.md
-!output/medium-post.md
+medium-post*
 
 # v1 manual data — KEEP in git
 !data/cosmologies_v1_manual.json
