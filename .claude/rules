@@ -120,3 +120,41 @@ Kept in git:
 The FAISS index covers ALL traditions in a single file.
 Adding or changing ANY tradition's corpus requires full re-embed of all traditions.
 After re-embed: index size should change (check with `python -c "import faiss; print(faiss.read_index('data/embeddings/corpus.index').ntotal)"`)
+
+## LaTeX / PDF Compilation
+
+### After every pdflatex run — always check the log
+Never declare success from "Output written" alone. Always run:
+  grep "Overfull.hbox" docs/*.log
+Zero results = safe. Any result = something visually clips off the right edge.
+
+The Overfull vbox warning from the metropolis title slide (~13pt) is a known theme quirk — ignore it.
+
+### Reading LaTeX log page markers correctly
+`[4]\nOverfull \hbox ... at line 143` does NOT mean slide 4 overflows.
+It means TeX shipped page 4, then found the overflow while typesetting page 5.
+Always cross-reference the line number to the .tex source to find the actual slide.
+
+### TikZ horizontal node chains — pre-calculate width before writing
+Formula: total_width = N × min_width + (N-1) × node_distance
+Beamer 16:9 textwidth ≈ 12.4cm. Never exceed it.
+
+Example: 6 nodes × 1.6cm + 5 gaps × 1.5cm = 17.1cm → overflows by ~4.7cm (90pt)
+Fix:      6 nodes × 1.5cm + 5 gaps × 0.7cm = 12.5cm → fits
+
+Safe defaults for 6-node chains in Beamer 16:9:
+  min_width=1.5cm, node_distance=0.7cm, font=\scriptsize
+
+### Missing LaTeX packages on TinyTeX (Windows)
+tlmgr is not on PATH. Use the full path:
+  "C:/Users/secki/AppData/Roaming/TinyTeX/bin/windows/tlmgr.bat" install <package>
+
+### Always compile twice
+First pass resolves content; second pass fixes cross-references and ToC.
+  pdflatex -interaction=nonstopmode file.tex
+  pdflatex -interaction=nonstopmode file.tex
+
+### Commit convention for docs
+All commits must include:
+  Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+Use a HEREDOC for multi-line messages to avoid shell quoting issues.
