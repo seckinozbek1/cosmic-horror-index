@@ -50,3 +50,5 @@ medium-post*
 
 # v1 manual data — KEEP in git
 !data/cosmologies_v1_manual.json
+
+medium_post/
