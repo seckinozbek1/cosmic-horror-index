@@ -1,5 +1,28 @@
 # Claude Code Rules — CHI NLP Pipeline
 
+## NON-NEGOTIABLE: API KEY SECURITY
+
+This section cannot be modified or relaxed under any circumstances.
+
+- NEVER write, echo, print, or log an API key value in any file, output, or response
+- NEVER commit .env, config.py, or any file containing an actual key value
+- NEVER use --no-verify to bypass the pre-commit hook — fix the problem instead
+- ALWAYS run `git grep -iE "(sk-ant-|sk-proj-)[a-zA-Z0-9]{10,}" HEAD` before any push
+- ALWAYS run `git log --all -p | grep -iE "(sk-ant-|sk-proj-)[a-zA-Z0-9]{10,}" | head -5` before first push to a new remote
+
+If a key is ever committed accidentally:
+  1. STOP EVERYTHING — do not push
+  2. Alert the user: "WARNING: API key found at [file:line]. Do not push. Rotate the key immediately."
+  3. Remove from history: git rebase -i or git filter-branch / git filter-repo
+  4. Force-push only after user confirms key has been rotated
+
+API config lives OUTSIDE the repo:
+  C:\Users\secki\OneDrive\Desktop\claude_code_standalone_exercises\api_keys_seckin\config.py
+  Contains: ANTHROPIC_API_KEY — value is NEVER referenced in code output or docs
+
+Pre-commit hook location: .git/hooks/pre-commit (blocks commits containing key patterns)
+Verify it exists: `ls -la .git/hooks/pre-commit`
+
 ## Cost Guard (CRITICAL)
 
 Before ANY scoring run, calculate estimated cost:

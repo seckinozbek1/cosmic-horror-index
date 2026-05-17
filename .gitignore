@@ -16,10 +16,17 @@ data/processed/
 
 # Secrets — never commit
 api_keys_seckin/
+**/api_keys*/
+**/keys*/
 config.py
+**/config.py
 .env
+*.env
+.env.*
 *.key
 *_secret*
+*credentials*
+*_token*
 
 # OS
 .DS_Store
