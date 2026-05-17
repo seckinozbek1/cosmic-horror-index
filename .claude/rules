@@ -1,0 +1,99 @@
+# Claude Code Rules — CHI NLP Pipeline
+
+## Cost Guard (CRITICAL)
+
+Before ANY scoring run, calculate estimated cost:
+  Formula: (n_traditions × 10 × 20 × 700 × $3/MTok input) + (n_traditions × 10 × 20 × 100 × $15/MTok output)
+  Quick: ~$0.72 per tradition
+
+If estimated cost > $15 USD: STOP and ask for confirmation before proceeding.
+Display as: "Estimated cost: ~$X.XX for N traditions. Proceed? [y/n]"
+
+Use `python tasks.py cost-estimate` or `python tasks.py cost-estimate --traditions X Y`
+
+Log actual token usage after each scoring run to output/cost_log.json if possible.
+
+## Never Without Explicit Confirmation
+
+- `python src/main.py --stage score` (bare, all traditions) without cost check
+- Any destructive data/ operation (deleting embeddings, raw corpus files)
+- Re-embed while another scoring process is running (will corrupt results)
+- Pushing to remote (user will create the remote themselves)
+
+## Corpus Workflow — Always Follow This Order
+
+When adding or changing any tradition:
+  1. Add to config/pipeline_config.yaml
+  2. Add keywords to src/corpus/keywords.py
+  3. python tasks.py corpus <tradition>
+  4. python tasks.py validate-corpus          ← NEVER SKIP THIS
+  5. python tasks.py embed                    ← full index rebuild, all traditions
+  6. python tasks.py score <tradition>        ← NOT score-all unless corpus changed for all
+  7. python tasks.py export
+
+## Scoring Rules
+
+- Always use --tradition flag for incremental runs: `python tasks.py score norse shinto`
+- NEVER run score-all unless ALL corpus files have been validated since the last embed
+- Never run score immediately after changing corpus — always embed first
+- Check file timestamps: `ls -la data/embeddings/corpus.index data/processed/scoring_results.json`
+  If scoring_results.json is older than corpus.index, re-score
+
+## PG ID Verification (prevents the #1 recurring bug)
+
+BEFORE adding any Project Gutenberg source to config:
+  1. Fetch https://www.gutenberg.org/ebooks/NNNN and read the title
+  2. Confirm title matches expected text
+  3. Test the .txt URL: try /cache/epub/NNNN/pgNNNN.txt first, then /files/NNNN/NNNN-0.txt
+  4. Add source URL only after confirming both title AND URL work
+
+NEVER guess PG IDs. Wrong IDs have caused 7 mismatches in production (see docs/RUNBOOK.md).
+
+## API Key Security
+
+API key location: C:\Users\secki\OneDrive\Desktop\claude_code_standalone_exercises\api_keys_seckin\config.py
+Contains: ANTHROPIC_API_KEY variable — NEVER log, print, or commit its value.
+
+## Corpus Validation
+
+After any corpus download, run `python tasks.py validate-corpus`.
+A SUSPICIOUS result means the downloaded text doesn't contain tradition keywords.
+Do NOT embed suspicious files — fix the source URL first.
+
+## min_relevance_threshold by Text Type
+
+- Doctrinal texts (sutras, upanishads, gita): 0.3
+- Mythological prose (eddas, theogony, popol vuh): 0.2
+- Poetic/verse (vedic hymns, lyric poetry): 0.15
+
+Current pipeline default: 0.2 (in config/pipeline_config.yaml)
+
+## Parallelization
+
+Fan out parallel agents for independent tasks:
+- Downloading multiple corpus sources
+- Scoring different traditions (they do NOT share state)
+- Generating docs files
+- Validating corpus for different traditions
+
+Sequential dependencies that CANNOT be parallelized:
+  corpus → validate → embed → score → export
+
+## Large Files Stay Out of Git
+
+Excluded by .gitignore:
+- data/raw/         (downloaded corpus, regenerable)
+- data/embeddings/  (FAISS index, regenerable from corpus)
+- data/processed/   (intermediate results, regenerable)
+- .venv/
+
+Kept in git:
+- output/chi_dataset_grounded.json
+- output/evidence_document.md
+- data/cosmologies_v1_manual.json
+
+## Index Lifecycle
+
+The FAISS index covers ALL traditions in a single file.
+Adding or changing ANY tradition's corpus requires full re-embed of all traditions.
+After re-embed: index size should change (check with `python -c "import faiss; print(faiss.read_index('data/embeddings/corpus.index').ntotal)"`)

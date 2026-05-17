@@ -1,0 +1,45 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Large data files (regenerable — see docs/RUNBOOK.md)
+data/raw/
+data/embeddings/
+data/processed/
+
+# Secrets — never commit
+api_keys_seckin/
+config.py
+.env
+*.key
+*_secret*
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Pipeline scratch
+check_retrieval.py
+*.lock
+!.claude/scheduled_tasks.lock
+
+# Output artifacts — KEEP in git
+!output/chi_dataset_grounded.json
+!output/evidence_document.md
+!output/medium-post.md
+
+# v1 manual data — KEEP in git
+!data/cosmologies_v1_manual.json
